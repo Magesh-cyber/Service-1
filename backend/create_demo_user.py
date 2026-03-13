@@ -26,3 +26,5 @@ def create_user(email, password, full_name, role):
 if __name__ == "__main__":
     create_user("citizen@example.com", "password123", "Alex Fischer", "citizen")
     create_user("admin@cybershield.gov", "admin123", "Super Admin", "admin")
+    create_user("clerk@cybershield.gov", "clerk123", "Clerk Officer", "clerk")
+    create_user("manager@cybershield.gov", "manager123", "Senior Manager", "manager")

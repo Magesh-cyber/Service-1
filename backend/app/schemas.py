@@ -22,3 +22,6 @@ class ApplicationRequest(BaseModel):
     parent_name: str
     address: str
     phone: str
+
+class DecisionRequest(BaseModel):
+    remark: Optional[str] = None

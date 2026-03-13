@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Float
 from sqlalchemy.sql import func
 from app.database import Base
 
@@ -47,8 +47,25 @@ class Application(Base):
     parent_name = Column(String, nullable=False)
     address = Column(Text, nullable=False)
     phone = Column(String, nullable=False)
-    status = Column(String, default="Pending")
+    status = Column(String, default="UNDER_CLERK_REVIEW")
+
+    # Risk & Confidence
+    risk_score = Column(Integer, default=0, nullable=True)
+    confidence_level = Column(String, default="HIGH", nullable=True)
+
+    # Clerk review
+    clerk_decision = Column(String, nullable=True)
+    clerk_remark = Column(Text, nullable=True)
+
+    # Manager review
+    manager_decision = Column(String, nullable=True)
+    manager_remark = Column(Text, nullable=True)
+
+    # Final outcome
+    final_report = Column(Text, nullable=True)
+
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
 
 class IntegrityLedger(Base):
     __tablename__ = "integrity_ledger"

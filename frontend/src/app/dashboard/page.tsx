@@ -3,12 +3,19 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth } from '@/lib/auth';
+import { apiFetch, endpoints } from '@/lib/api';
 import StatusCard from '@/components/StatusCard';
 import ServiceCard from '@/components/ServiceCard';
+import ApplicationTracker from '@/components/ApplicationTracker';
 
 export default function DashboardPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
+  const [requests, setRequests] = useState<any[]>([]);
+  const [isLoadingRequests, setIsLoadingRequests] = useState(true);
+  const [qrData, setQrData] = useState<any>(null);
+  const [isQrModalOpen, setIsQrModalOpen] = useState(false);
+  const [isFetchingQr, setIsFetchingQr] = useState(false);
 
   useEffect(() => {
     if (!auth.isAuthenticated()) {
@@ -16,7 +23,26 @@ export default function DashboardPage() {
       return;
     }
     setUser(auth.getUser());
+
+    apiFetch(endpoints.myRequests)
+      .then((data) => setRequests(data.requests || []))
+      .catch(() => setRequests([]))
+      .finally(() => setIsLoadingRequests(false));
   }, [router]);
+
+  const handleQrClick = async () => {
+    setIsQrModalOpen(true);
+    setIsFetchingQr(true);
+    try {
+      const data = await apiFetch(endpoints.qrAccess);
+      setQrData(data);
+    } catch (err: any) {
+      console.error('Failed to fetch QR data:', err);
+      setQrData({ error: err.message || 'QR not available for this application yet.' });
+    } finally {
+      setIsFetchingQr(false);
+    }
+  };
 
   if (!user) return null;
 
@@ -69,9 +95,53 @@ export default function DashboardPage() {
             title="Offline QR Access"
             status="Ready for use"
             type="info"
+            onClick={handleQrClick}
             icon={<svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" /></svg>}
           />
         </div>
+      </section>
+
+      {/* My Requests — Application Tracker */}
+      <section>
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-bold text-navy">My Requests</h2>
+            <p className="mt-0.5 text-sm text-muted/70">Track the status of your submitted service applications.</p>
+          </div>
+          {requests.length > 0 && (
+            <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
+              {requests.length} Application{requests.length !== 1 ? 's' : ''}
+            </span>
+          )}
+        </div>
+
+        {isLoadingRequests ? (
+          <div className="flex h-40 items-center justify-center rounded-2xl border border-border bg-white shadow-soft">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary/20 border-t-primary" />
+          </div>
+        ) : requests.length === 0 ? (
+          <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-border bg-white py-14 shadow-soft text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/5 text-primary">
+              <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm font-bold text-navy">No applications yet</p>
+              <p className="mt-1 text-xs text-muted/70">Submit a service request below to track it here.</p>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {requests.map((req) => (
+              <ApplicationTracker
+                key={req.application_id}
+                application={req}
+              />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Citizen Services Section */}
@@ -109,6 +179,74 @@ export default function DashboardPage() {
           />
         </div>
       </section>
+
+      {/* QR Access Modal */}
+      {isQrModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy/40 backdrop-blur-sm p-4" onClick={() => setIsQrModalOpen(false)}>
+          <div className="relative w-full max-w-sm rounded-3xl bg-white shadow-2xl border border-border p-8 text-center animate-in fade-in zoom-in duration-200" onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setIsQrModalOpen(false)} className="absolute top-5 right-5 text-muted hover:text-navy transition-colors">
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+
+            <div className="mb-6 flex flex-col items-center gap-1">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary shadow-sm mb-2">
+                <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" /></svg>
+              </div>
+              <h2 className="text-xl font-bold text-navy">Offline QR Access</h2>
+              <p className="text-sm font-medium text-muted/70 italic">Digital Kiosk Pass</p>
+            </div>
+
+            {isFetchingQr ? (
+              <div className="flex flex-col items-center justify-center py-10">
+                <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary/20 border-t-primary mb-4" />
+                <p className="text-xs font-bold text-navy animate-pulse">Retrieving Secure Pass...</p>
+              </div>
+            ) : qrData?.error ? (
+              <div className="py-8">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-danger/10 text-danger mb-4">
+                  <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </div>
+                <p className="text-sm font-bold text-navy">{qrData.error}</p>
+                <p className="mt-2 text-xs text-muted/70 leading-relaxed px-4">Submit an application first to generate your unique access pass.</p>
+              </div>
+            ) : qrData ? (
+              <div className="space-y-6">
+                <div className="relative mx-auto w-48 h-48 p-3 rounded-2xl bg-white border border-border bg-gradient-to-br from-primary/5 to-transparent shadow-sm overflow-hidden group">
+                  <img src={qrData.qr_code_url} alt="Verification QR" className="h-full w-full rounded-lg mix-blend-multiply" />
+                  <div className="absolute inset-x-0 bottom-0 h-1 bg-primary/20" />
+                </div>
+
+                <div className="grid gap-2">
+                  <div className="rounded-xl bg-background p-3 text-center border border-border">
+                    <p className="text-[9px] font-bold uppercase tracking-widest text-muted/60 mb-0.5">Verification Code</p>
+                    <p className="font-mono text-base font-extrabold text-navy tracking-wider">{qrData.verification_code}</p>
+                  </div>
+                  <div className="rounded-xl bg-success/5 p-3 text-center border border-success/10">
+                    <p className="text-[9px] font-bold uppercase tracking-widest text-success/60 mb-0.5">Application Reference</p>
+                    <p className="text-xs font-bold text-navy">{qrData.application_id} · {qrData.status.replace(/_/g, ' ')}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 rounded-xl bg-primary/5 p-4 text-left border border-primary/10">
+                  <svg className="h-5 w-5 text-primary mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  <p className="text-[11px] leading-relaxed text-navy/80">
+                    Scan this QR at any <strong>CyberShield Government Kiosk</strong> for instant offline verification and certificate lookup.
+                  </p>
+                </div>
+              </div>
+            ) : null}
+
+            <div className="mt-8">
+              <button
+                onClick={() => setIsQrModalOpen(false)}
+                className="w-full rounded-xl bg-primary py-3 text-sm font-bold text-white shadow-soft transition-all hover:bg-primary-dark hover:shadow-md"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

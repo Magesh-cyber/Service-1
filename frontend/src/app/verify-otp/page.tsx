@@ -65,6 +65,10 @@ export default function VerifyOtpPage() {
 
       if (data.role === 'citizen') {
         router.push('/dashboard');
+      } else if (data.role === 'clerk') {
+        router.push('/clerk');
+      } else if (data.role === 'manager') {
+        router.push('/manager');
       } else {
         router.push('/admin');
       }

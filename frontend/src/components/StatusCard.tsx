@@ -7,9 +7,10 @@ interface StatusCardProps {
   status: string;
   type: 'success' | 'warning' | 'info' | 'active';
   icon: React.ReactNode;
+  onClick?: () => void;
 }
 
-export default function StatusCard({ title, status, type, icon }: StatusCardProps) {
+export default function StatusCard({ title, status, type, icon, onClick }: StatusCardProps) {
   const statusStyles = {
     success: 'text-success bg-success/10',
     warning: 'text-warning bg-warning/10',
@@ -25,7 +26,12 @@ export default function StatusCard({ title, status, type, icon }: StatusCardProp
   };
 
   return (
-    <div className="flex flex-col gap-4 rounded-xl border border-border bg-white p-5 shadow-soft transition-all hover:shadow-md">
+    <div 
+      onClick={onClick}
+      className={`flex flex-col gap-4 rounded-xl border border-border bg-white p-5 shadow-soft transition-all ${
+        onClick ? 'cursor-pointer hover:shadow-md hover:border-primary/20 active:scale-[0.98]' : ''
+      }`}
+    >
       <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${statusStyles[type]}`}>
         {icon}
       </div>
