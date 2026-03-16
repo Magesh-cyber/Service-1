@@ -29,8 +29,8 @@ COPY . .
 # Create directories for uploads and QR codes if they don't exist
 RUN mkdir -p uploads/profile_photos qr_codes
 
-# Expose port
+# Expose port (Render uses 10000 by default, but we'll handle both)
 EXPOSE 8000
 
-# Run uvicorn
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Use a shell form for CMD to allow environment variable expansion for the port
+CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
