@@ -17,7 +17,7 @@ export default function LoginPage() {
   const [showOtpToast, setShowOtpToast] = useState(false);
   const [demoOtp, setDemoOtp] = useState('');
   const [sessionExpired, setSessionExpired] = useState(false);
-  
+
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('msg') === 'session_expired') {
@@ -47,9 +47,9 @@ export default function LoginPage() {
       // Show risk feedback if available
       if (data.risk_score !== undefined) {
         setRiskData({ risk_score: data.risk_score, risk_status: data.risk_status });
-        
+
         const isBlocked = data.action_taken === 'BLOCK' || data.action_taken === 'LOGIN_BLOCKED' || data.risk_status === 'BLOCKED';
-        
+
         if (!isBlocked) {
           if (data.demo_otp) {
             setDemoOtp(data.demo_otp);
@@ -86,23 +86,23 @@ export default function LoginPage() {
             </svg>
           </div>
           <h1 className="text-3xl font-black text-navy tracking-tight uppercase">Login</h1>
-          <p className="mt-2 text-xs font-bold text-amber-600 uppercase tracking-widest">Sign in to your account</p>
+          <p className="mt-2 text-xs font-black uppercase tracking-widest text-saffron bg-navy/5 inline-block px-3 py-1 rounded-lg">Sign in to your account</p>
         </div>
 
         {/* OTP Toast Notification */}
         {showOtpToast && (
           <div className="fixed top-6 right-6 z-[100] animate-in fade-in slide-in-from-top-4 duration-300">
-            <div className="flex items-center gap-4 rounded-3xl border-2 border-amber-600 bg-white p-6 shadow-[0_30px_60px_-15px_rgba(217,119,6,0.2)] ring-8 ring-amber-600/5">
+            <div className="flex items-center gap-4 rounded-3xl border-2 border-saffron bg-white p-6 shadow-[0_30px_60px_-15px_rgba(255,153,51,0.2)] ring-8 ring-saffron/10">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-navy text-white shadow-lg">
                 <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
               </div>
               <div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-amber-600">Verification Code</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-saffron">Verification Code</p>
                 <h4 className="text-2xl font-black text-navy tracking-[0.3em] mt-1">{demoOtp}</h4>
               </div>
-              <button 
+              <button
                 onClick={() => setShowOtpToast(false)}
                 className="ml-4 text-slate-300 hover:text-navy transition-colors"
               >
@@ -126,9 +126,8 @@ export default function LoginPage() {
           )}
 
           {riskData && (
-            <div className={`mb-6 rounded-lg p-4 text-sm font-medium ${
-              riskData.risk_status === 'LOW' ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning'
-            }`}>
+            <div className={`mb-6 rounded-lg p-4 text-sm font-medium ${riskData.risk_status === 'LOW' ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning'
+              }`}>
               Security Status: {riskData.risk_status} (Score: {riskData.risk_score}/100)
               {riskData.risk_status !== 'BLOCKED' && <p className="mt-1 text-xs opacity-80">Initialising session...</p>}
             </div>
@@ -146,7 +145,7 @@ export default function LoginPage() {
                 className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-navy focus:border-primary focus:outline-none transition-all placeholder:text-muted/50"
               />
             </div>
-            
+
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-muted mb-1.5">Password</label>
               <input
@@ -170,7 +169,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-amber-600 py-4 text-xs font-black uppercase tracking-widest text-white shadow-xl transition-all hover:bg-amber-700 hover:shadow-2xl hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-saffron py-4 text-xs font-black uppercase tracking-widest text-white shadow-xl transition-all hover:bg-[#F28B20] hover:shadow-2xl hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white"></div>

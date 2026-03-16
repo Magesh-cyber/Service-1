@@ -10,7 +10,10 @@ export default function VerifyOtpPage() {
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isLoading, setIsLoading] = useState(false);
+  const [isResending, setIsResending] = useState(false);
   const [error, setError] = useState('');
+  const [resendOtpCode, setResendOtpCode] = useState('');
+  const [resendSuccess, setResendSuccess] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
@@ -77,9 +80,59 @@ export default function VerifyOtpPage() {
       setIsLoading(false);
     }
   };
+  
+  const handleResendOtp = async () => {
+    setIsResending(true);
+    setError('');
+    setResendSuccess(false);
+    
+    try {
+      const data = await apiFetch(endpoints.resendOtp, {
+        method: 'POST',
+        body: JSON.stringify({ email }),
+      });
+      
+      setResendOtpCode(data.demo_otp);
+      setResendSuccess(true);
+      // Clear success message after 5 seconds
+      setTimeout(() => setResendSuccess(false), 5000);
+    } catch (err: any) {
+      setError(err.message || 'Failed to resend OTP.');
+    } finally {
+      setIsResending(false);
+    }
+  };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4">
+    <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4 relative overflow-hidden">
+      {/* Resend OTP Toast Notification */}
+      {resendSuccess && (
+        <div className="fixed top-8 right-8 z-[100] animate-in fade-in slide-in-from-right-8 duration-500">
+          <div className="bg-white/80 backdrop-blur-xl border border-emerald-100 rounded-3xl p-6 shadow-[0_30px_60px_-15px_rgba(16,185,129,0.15)] flex items-center gap-6">
+            <div className="h-12 w-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600 mb-1">New Security OTP</p>
+              <div className="flex items-center gap-2">
+                <h4 className="text-2xl font-black text-navy tracking-[0.4em] font-mono">{resendOtpCode}</h4>
+              </div>
+              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-1 italic">Generated for your security</p>
+            </div>
+            <button 
+              onClick={() => setResendSuccess(false)}
+              className="ml-4 p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-300 hover:text-slate-600"
+            >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="w-full max-w-md overflow-hidden rounded-[40px] border border-slate-100 bg-white shadow-[0_40px_80px_-20px_rgba(15,23,42,0.08)]">
         <div className="bg-navy p-10 text-center relative overflow-hidden">
           {/* Subtle grid background */}
@@ -91,7 +144,7 @@ export default function VerifyOtpPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
-          <p className="relative z-10 text-[10px] font-black uppercase tracking-[0.3em] text-amber-500 mb-2">Verification Code</p>
+          <p className="relative z-10 text-[10px] font-black uppercase tracking-[0.3em] text-amber mb-2">Verification Code</p>
           <h1 className="relative z-10 text-3xl font-black tracking-tighter text-white uppercase">Verify Your Identity</h1>
         </div>
 
@@ -161,7 +214,14 @@ export default function VerifyOtpPage() {
 
           <div className="mt-10 pt-6 border-t border-slate-50 text-center">
             <p className="text-xs font-medium text-slate-400 mb-4">
-              Didn't receive the code? <button className="font-black uppercase tracking-widest text-navy ml-2 hover:text-amber transition-colors">Resend OTP</button>
+              Didn't receive the code? 
+              <button 
+                onClick={handleResendOtp}
+                disabled={isResending}
+                className="font-black uppercase tracking-widest text-navy ml-2 hover:text-amber transition-colors disabled:opacity-50"
+              >
+                {isResending ? 'Resending...' : 'Resend OTP'}
+              </button>
             </p>
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-full border border-slate-100">
                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></div>

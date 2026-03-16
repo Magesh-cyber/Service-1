@@ -13,7 +13,7 @@ const CAROUSEL_CARDS = [
     title: 'Secure Entry',
     description: 'Experience a passwordless future with biometric facial recognition or fingerprint verification. Multi-Factor Authentication (MFA) ensures that your digital identity remains unique to you, preventing identity theft and unauthorized logins.',
     icon: <Fingerprint className="w-8 h-8" />,
-    color: 'amber'
+    color: 'saffron'
   },
   {
     id: 'B',
@@ -27,7 +27,7 @@ const CAROUSEL_CARDS = [
     title: 'Blockchain Integrity',
     description: 'Your documents are secured as smart certificates on a decentralized ledger. This makes them instantly verifiable by any authority without the need for physical copies, as the record is permanently immutable and tamper-proof.',
     icon: <ShieldCheck className="w-8 h-8" />,
-    color: 'emerald'
+    color: 'indian-green'
   },
   {
     id: 'D',
@@ -41,7 +41,7 @@ const CAROUSEL_CARDS = [
     title: 'Digital Ration QR',
     description: 'Take the Public Distribution System (PDS) anywhere. Your secure QR code card works even without an active internet connection, allowing you to claim rations and verify your benefits at local outlets with zero friction.',
     icon: <QrCode className="w-8 h-8" />,
-    color: 'orange'
+    color: 'indian-green'
   }
 ];
 
@@ -60,7 +60,7 @@ const OFFICIAL_ROLES = [
     description: 'Oversee ration distribution, manage stock inventory, and monitor outlet operations.',
     icon: <QrCode className="w-6 h-6" />,
     link: '/pds/login',
-    color: 'amber'
+    color: 'saffron'
   },
   {
     title: 'Regional Manager',
@@ -87,7 +87,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen text-[#0F172A] selection:bg-amber selection:text-navy overflow-x-hidden">
+    <div className="relative min-h-screen text-[#0F172A] selection:bg-saffron selection:text-white overflow-x-hidden">
       {/* Dynamic Background System */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-[#F8FAFC]"></div>
@@ -113,7 +113,7 @@ export default function LandingPage() {
               </div>
               <div>
                 <h1 className="text-sm font-black uppercase tracking-tighter leading-none text-[#0F172A]">CyberShield</h1>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-amber-600 mt-0.5">Secure Governance Platform</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-saffron mt-0.5">Secure Governance Platform</p>
               </div>
               <div className="h-10 w-px bg-slate-200 mx-2 hidden sm:block"></div>
               <div className="h-10 w-20 overflow-hidden hidden sm:flex items-center">
@@ -131,7 +131,7 @@ export default function LandingPage() {
                 onClick={() => {
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="px-4 py-2 text-xs font-black uppercase tracking-widest text-[#0F172A] hover:text-amber-600 transition-colors"
+                className="px-4 py-2 text-xs font-black uppercase tracking-widest text-[#0F172A] hover:text-saffron transition-colors"
               >
                 Home
               </button>
@@ -140,7 +140,7 @@ export default function LandingPage() {
                   const element = document.getElementById('about');
                   element?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="px-4 py-2 text-xs font-black uppercase tracking-widest text-[#0F172A] hover:text-amber-600 transition-colors"
+                className="px-4 py-2 text-xs font-black uppercase tracking-widest text-[#0F172A] hover:text-saffron transition-colors"
               >
                 About
               </button>
@@ -168,14 +168,14 @@ export default function LandingPage() {
           {/* Left Column */}
           <div className="flex-1 space-y-8 text-center lg:text-left animate-in fade-in slide-in-from-left duration-1000">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200">
-              <div className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse"></div>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">ONE GOVERNMENT NETWORK</span>
+              <div className="h-1.5 w-1.5 rounded-full bg-saffron animate-pulse shadow-[0_0_8px_rgba(255,153,51,0.5)]"></div>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">One Government Network</span>
             </div>
 
             <h2 className="text-5xl lg:text-7xl font-black tracking-tighter text-[#0F172A] leading-[1.05] uppercase">
               Secure Digital <br />
               Governance <br />
-              <span className="text-amber-600">Platform</span>
+              <span className="text-saffron">Platform</span>
             </h2>
 
             <p className="max-w-xl text-lg font-medium text-slate-500 leading-relaxed mx-auto lg:mx-0">
@@ -187,7 +187,7 @@ export default function LandingPage() {
                 href="/login"
                 className="group flex items-center gap-3 rounded-xl bg-[#0F172A] px-8 py-4 text-sm font-black uppercase tracking-widest text-white shadow-2xl hover:bg-[#1E293B] transition-all hover:-translate-y-1"
               >
-                Explore Portals
+                Explore Services
                 <svg className="h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
                 </svg>
@@ -220,7 +220,7 @@ export default function LandingPage() {
                   className="absolute inset-0 rounded-[40px] p-8 backdrop-blur-3xl border border-navy/15 bg-white/40 hover:border-navy/50 hover:shadow-[0_0_50px_-10px_rgba(15,23,42,0.4),0_0_20px_rgba(15,23,42,0.1)] transition-all duration-700 flex flex-col justify-between group/card cursor-pointer"
                 >
                   <div className="flex items-start justify-between">
-                    <div className={`p-4 rounded-2xl bg-${CAROUSEL_CARDS[currentIndex].color}-500/10 text-${CAROUSEL_CARDS[currentIndex].color}-600`}>
+                    <div className={`p-4 rounded-2xl bg-${CAROUSEL_CARDS[currentIndex].color}/10 text-${CAROUSEL_CARDS[currentIndex].color}`}>
                       {CAROUSEL_CARDS[currentIndex].icon}
                     </div>
                   </div>
@@ -247,7 +247,7 @@ export default function LandingPage() {
               {CAROUSEL_CARDS.map((_, i) => (
                 <div
                   key={i}
-                  className={`h-1 rounded-full transition-all duration-500 ${i === currentIndex ? 'w-8 bg-amber-500' : 'w-2 bg-slate-200'}`}
+                  className={`h-1 rounded-full transition-all duration-500 ${i === currentIndex ? 'w-8 bg-saffron shadow-[0_0_8px_rgba(255,153,51,0.3)]' : 'w-2 bg-slate-200'}`}
                 />
               ))}
             </div>
@@ -307,7 +307,7 @@ export default function LandingPage() {
         {/* About & Infrastructure Section */}
         <section id="about" className="py-32 bg-[#0F172A] relative overflow-hidden border-t border-white/5 scroll-mt-20">
           {/* Decorative Grid */}
-          <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#F59E0B 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+          <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#F5E7C6 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
 
           <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
             <div className="grid lg:grid-cols-2 gap-16 items-center mb-24">
@@ -318,7 +318,7 @@ export default function LandingPage() {
 
                 <h2 className="text-4xl lg:text-6xl font-black tracking-tighter text-white uppercase leading-tight">
                   One Platform for <br />
-                  <span className="text-amber-500">Government Services</span>
+                  <span className="text-saffron">Government Services</span>
                 </h2>
 
                 <p className="text-xl font-medium text-slate-400 leading-relaxed max-w-xl">
@@ -351,7 +351,7 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-3 gap-8">
               {/* Feature 1 */}
               <div className="group p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-sm transition-all hover:bg-white/10 hover:-translate-y-2">
-                <div className="h-12 w-12 rounded-2xl bg-amber-500/20 flex items-center justify-center text-amber-500 mb-8">
+                <div className="h-12 w-12 rounded-2xl bg-saffron/20 flex items-center justify-center text-saffron mb-8">
                   <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
@@ -364,7 +364,7 @@ export default function LandingPage() {
 
               {/* Feature 2 */}
               <div className="group p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-sm transition-all hover:bg-white/10 hover:-translate-y-2">
-                <div className="h-12 w-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-500 mb-8">
+                <div className="h-12 w-12 rounded-2xl bg-indian-green/20 flex items-center justify-center text-indian-green mb-8">
                   <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
@@ -377,7 +377,7 @@ export default function LandingPage() {
 
               {/* Feature 3 */}
               <div className="group p-8 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-sm transition-all hover:bg-white/10 hover:-translate-y-2">
-                <div className="h-12 w-12 rounded-2xl bg-blue-500/20 flex items-center justify-center text-blue-500 mb-8">
+                <div className="h-12 w-12 rounded-2xl bg-navy/20 flex items-center justify-center text-navy mb-8">
                   <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                   </svg>

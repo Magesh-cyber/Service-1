@@ -53,6 +53,7 @@ export async function downloadFile(endpoint: string, filename: string) {
 export const endpoints = {
   login: '/login',
   verifyOtp: '/verify-otp',
+  resendOtp: '/resend-otp',
   register: '/register',
   birthCertificate: '/services/birth-certificate',
 

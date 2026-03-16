@@ -105,12 +105,14 @@ export default function DashboardPage() {
   return (
     <div className="space-y-12 pb-20">
       {/* Welcome Section */}
-      <section className="flex items-center gap-8 rounded-[32px] bg-white p-10 shadow-[0_40px_80px_-20px_rgba(15,23,42,0.08)] border border-slate-100">
+      <section className="flex items-center gap-8 rounded-[32px] bg-[#BFC6C4] p-10 shadow-[0_40px_80px_-20px_rgba(15,23,42,0.08)] border border-slate-300">
         <div
           className="relative h-28 w-28 cursor-pointer group"
           onClick={() => fileInputRef.current?.click()}
         >
-          <div className="h-full w-full overflow-hidden rounded-full border-4 border-amber/10 p-1.5 transition-all duration-500 group-hover:border-amber/30 bg-white shadow-inner">
+          <div className="h-full w-full overflow-hidden rounded-full border-4 border-slate-100 p-1.5 transition-all duration-500 group-hover:border-saffron bg-white shadow-inner relative">
+            {/* Saffron/Green split border feel */}
+            <div className="absolute -inset-1 rounded-full border-2 border-indian-green/20"></div>
             {profile?.profile_photo ? (
               <img
                 src={profile.profile_photo}
@@ -132,7 +134,7 @@ export default function DashboardPage() {
           </div>
           {isUploading && (
             <div className="absolute inset-0 flex items-center justify-center rounded-full bg-white/80">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-amber border-t-transparent"></div>
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-saffron border-t-transparent"></div>
             </div>
           )}
           <input
@@ -144,24 +146,32 @@ export default function DashboardPage() {
           />
         </div>
         <div className="space-y-1">
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-600">Citizen Profile</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#CF6A02]">Citizen Profile</p>
           <h1 className="text-4xl font-black tracking-tighter text-navy uppercase leading-none">
             {profile?.full_name || user.full_name || user.email.split('@')[0]}
           </h1>
-          <p className="text-sm font-medium text-slate-400">Manage your digital services and applications</p>
+          <p className="text-sm font-black text-navy/70">Manage your digital services and applications</p>
         </div>
       </section>
 
       {/* Security Status Section */}
-      <section>
+      <section className="rounded-[32px] bg-[#EAEFEF] p-10 shadow-[0_40px_80px_-20px_rgba(15,23,42,0.06)] border border-slate-200">
         <div className="mb-8 flex items-center justify-between">
           <h2 className="text-xl font-black text-navy uppercase tracking-tighter">Account Status</h2>
-          <div className="flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-1.5 text-[10px] font-black text-emerald-600 border border-emerald-100">
-            <div className="h-2 w-2 animate-pulse rounded-full bg-emerald-500"></div>
+          <div className="flex items-center gap-2 rounded-full bg-indian-green/5 px-4 py-1.5 text-[10px] font-black text-indian-green border border-indian-green/10">
+            <div className="h-2 w-2 animate-pulse rounded-full bg-saffron shadow-[0_0_8px_rgba(255,153,51,0.5)]"></div>
             SYSTEM STATUS: OPERATIONAL
           </div>
         </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <StatusCard
+            title="QR Identity"
+            status="Available"
+            type="info"
+            highlight={true}
+            onClick={handleQrClick}
+            icon={<svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" /></svg>}
+          />
           <StatusCard
             title="OTP Status"
             status="Active"
@@ -180,25 +190,18 @@ export default function DashboardPage() {
             type="info"
             icon={<svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>}
           />
-          <StatusCard
-            title="QR Identity"
-            status="Available"
-            type="info"
-            onClick={handleQrClick}
-            icon={<svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" /></svg>}
-          />
         </div>
       </section>
 
       {/* My Requests Section */}
-      <section id="application-status">
+      <section id="application-status" className="rounded-[32px] bg-[#EAEFEF] p-10 shadow-[0_40px_80px_-20px_rgba(15,23,42,0.06)] border border-slate-200">
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h2 className="text-xl font-black text-navy uppercase tracking-tighter">My Applications</h2>
-            <p className="mt-1 text-xs font-bold text-slate-400 uppercase tracking-widest">Recent service requests</p>
+            <p className="mt-1 text-xs font-black text-navy/70 uppercase tracking-widest">Recent service requests</p>
           </div>
           {requests.length > 0 && (
-            <span className="rounded-full bg-navy px-4 py-1.5 text-[10px] font-black text-white shadow-xl uppercase tracking-widest">
+            <span className="rounded-full bg-indian-green px-4 py-1.5 text-[10px] font-black text-white shadow-xl uppercase tracking-widest border border-white/20">
               {requests.length} Applications found
             </span>
           )}
@@ -234,14 +237,14 @@ export default function DashboardPage() {
       </section>
 
       {/* PDS Distribution History Section */}
-      <section id="pds-history">
+      <section id="pds-history" className="rounded-[32px] bg-[#EAEFEF] p-10 shadow-[0_40px_80px_-20px_rgba(15,23,42,0.06)] border border-slate-200">
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h2 className="text-xl font-black text-navy uppercase tracking-tighter">PDS Distribution History</h2>
-            <p className="mt-1 text-xs font-bold text-slate-400 uppercase tracking-widest">Recent ration issuances</p>
+            <p className="mt-1 text-xs font-black text-navy/70 uppercase tracking-widest">Recent ration issuances</p>
           </div>
           {pdsTransactions.length > 0 && (
-            <span className="rounded-full bg-amber px-4 py-1.5 text-[10px] font-black text-navy shadow-xl uppercase tracking-widest">
+            <span className="rounded-full bg-saffron px-4 py-1.5 text-[10px] font-black text-navy shadow-xl uppercase tracking-widest border border-white/20">
               {pdsTransactions.length} Transactions found
             </span>
           )}
@@ -249,11 +252,11 @@ export default function DashboardPage() {
 
         {isLoadingPds ? (
           <div className="flex h-40 items-center justify-center rounded-2xl border border-border bg-white shadow-soft">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-amber/20 border-t-amber" />
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-saffron/20 border-t-saffron" />
           </div>
         ) : pdsTransactions.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-border bg-white py-14 shadow-soft text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-amber/5 text-amber">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-saffron/5 text-saffron">
                <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
@@ -374,7 +377,7 @@ export default function DashboardPage() {
             </button>
 
             <div className="mb-6 flex flex-col items-center gap-1">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary shadow-sm mb-2">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-navy/10 text-navy shadow-sm mb-2">
                 <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" /></svg>
               </div>
               <h2 className="text-xl font-bold text-navy">Identity QR Code</h2>
@@ -431,7 +434,7 @@ export default function DashboardPage() {
                <button onClick={() => setIsBillModalOpen(false)} className="absolute top-6 right-6 text-white/60 hover:text-white transition-colors">
                 <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-amber mb-2">Public Distribution System</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-saffron mb-2">Public Distribution System</p>
               <h2 className="text-3xl font-black uppercase tracking-tighter">Distribution Receipt</h2>
               <p className="text-white/60 text-xs font-bold uppercase tracking-widest mt-2">Official Digital Bill • {selectedTx.transaction_id}</p>
             </div>

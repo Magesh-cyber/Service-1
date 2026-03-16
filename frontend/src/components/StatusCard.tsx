@@ -8,28 +8,33 @@ interface StatusCardProps {
   type: 'success' | 'warning' | 'info' | 'active';
   icon: React.ReactNode;
   onClick?: () => void;
+  highlight?: boolean;
 }
 
-export default function StatusCard({ title, status, type, icon, onClick }: StatusCardProps) {
+export default function StatusCard({ title, status, type, icon, onClick, highlight }: StatusCardProps) {
   const statusStyles = {
-    success: 'text-success bg-success/10',
-    warning: 'text-warning bg-warning/10',
-    info: 'text-primary bg-primary/10',
-    active: 'text-success bg-success/10',
+    success: 'text-indian-green bg-indian-green/10',
+    warning: 'text-saffron bg-saffron/10',
+    info: 'text-navy bg-navy/10',
+    active: 'text-indian-green bg-indian-green/10',
   };
 
   const dotStyles = {
-    success: 'bg-success',
-    warning: 'bg-warning',
-    info: 'bg-primary',
-    active: 'bg-success',
+    success: 'bg-indian-green',
+    warning: 'bg-saffron',
+    info: 'bg-navy',
+    active: 'bg-indian-green',
   };
 
   return (
     <div 
       onClick={onClick}
-      className={`flex flex-col gap-5 rounded-2xl border border-border bg-white p-6 shadow-soft transition-all duration-300 ${
-        onClick ? 'cursor-pointer hover:shadow-xl hover:-translate-y-1 hover:border-amber/20' : ''
+      className={`flex flex-col gap-5 rounded-2xl border p-6 shadow-soft transition-all duration-500 ${
+        highlight 
+          ? 'bg-[#F9F8F6] border-saffron shadow-[0_20px_40px_-15px_rgba(255,153,51,0.2)] ring-4 ring-saffron/10' 
+          : 'bg-white border-border'
+      } ${
+        onClick ? 'cursor-pointer hover:shadow-2xl hover:-translate-y-2 hover:border-saffron/60 hover:shadow-[0_25px_50px_-12px_rgba(255,153,51,0.4)]' : ''
       }`}
     >
       <div className={`flex h-12 w-12 items-center justify-center rounded-xl shadow-sm ${statusStyles[type]}`}>

@@ -206,6 +206,28 @@ def verify_otp(payload: schemas.OTPVerifyRequest, db: Session = Depends(get_db))
         "full_name": user.full_name
     }
 
+@router.post("/resend-otp")
+def resend_otp(payload: schemas.PasswordResetRequest, db: Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.email == payload.email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    otp_code = generate_otp()
+    otp = models.OTPCode(
+        email=payload.email,
+        otp_code=otp_code,
+        expires_at=datetime.now(timezone.utc) + timedelta(minutes=5)
+    )
+    db.add(otp)
+    db.commit()
+
+    create_audit_log(db, "OTP_RESENT", f"New OTP generated for {payload.email}")
+
+    return {
+        "message": "New OTP generated successfully",
+        "demo_otp": otp_code
+    }
+
 @router.post("/forgot-password")
 def forgot_password(payload: schemas.PasswordResetRequest, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.email == payload.email).first()
