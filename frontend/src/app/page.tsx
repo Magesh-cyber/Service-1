@@ -91,9 +91,9 @@ export default function LandingPage() {
       {/* Dynamic Background System */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-[#F8FAFC]"></div>
-        <div className="absolute inset-0 cyber-grid opacity-40"></div>
-        <div className="absolute top-1/2 left-1/2 w-[120%] h-[120%] -translate-x-1/2 -translate-y-1/2 opacity-[0.35] animate-holographic">
-          <img src="/flag.svg" alt="Background Flag" className="w-full h-full object-contain filter saturate-[0.9]" />
+        <div className="absolute inset-0 cyber-grid opacity-30"></div>
+        <div className="absolute inset-0 opacity-[0.25]">
+          <img src="/landing_bg.png" alt="Background Waves" className="w-full h-full object-cover" />
         </div>
         <div className="absolute inset-0 scanlines opacity-[0.1]"></div>
       </div>
