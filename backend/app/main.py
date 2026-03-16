@@ -3,7 +3,12 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
 import traceback
+import os
+from dotenv import load_dotenv
 from sqlalchemy.orm import Session
+
+# Load environment variables
+load_dotenv()
 from app.database import Base, engine, get_db
 from app import models, pdf_utils
 from app.auth import get_current_user
@@ -20,7 +25,7 @@ app = FastAPI(title="Service 1 Secure E-Governance API") # Trigger reload
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[os.getenv("FRONTEND_URL", "http://localhost:3000")],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

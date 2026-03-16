@@ -8,3 +8,5 @@ qrcode
 pillow
 python-multipart
 reportlab
+python-dotenv
+psycopg2-binary

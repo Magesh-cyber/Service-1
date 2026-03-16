@@ -1,10 +1,14 @@
 from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
-from passlib.context import CryptContext
 from fastapi import Header, HTTPException
 import random
+import os
+from dotenv import load_dotenv
 
-SECRET_KEY = "super-secret-demo-key-change-this"
+# Load environment variables from .env file
+load_dotenv()
+
+SECRET_KEY = os.getenv("SECRET_KEY", "super-secret-demo-key-change-this")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 720 # Extended for demo session
 

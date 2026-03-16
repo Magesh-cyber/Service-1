@@ -1,0 +1,1 @@
+2026-03-17 01:44:49.132988: Phone: 9361184228, Payload: {'route': 'otp', 'variables_values': '489503', 'numbers': '9361184228'}, Response: {'status_code': 996, 'message': 'Before using OTP Message API, complete website verification. Visit OTP Message menu or use DLT SMS API.'}
