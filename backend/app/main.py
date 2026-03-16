@@ -53,7 +53,7 @@ app.include_router(pds_router)
 
 @app.get("/")
 def root():
-    return {"message": "CyberSheild backend running successfully"}
+    return {"message": "Service 1 backend running successfully"}
 
 @app.get("/profile")
 def get_profile(current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
