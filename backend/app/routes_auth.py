@@ -301,7 +301,7 @@ def get_profile(db: Session = Depends(get_db), current_user: dict = Depends(get_
     return {
         "full_name": user.full_name,
         "email": user.email,
-        "profile_photo": f"http://localhost:8000/{user.profile_photo}" if user.profile_photo else None,
+        "profile_photo": f"{os.getenv('BACKEND_URL', 'http://localhost:8000')}/{user.profile_photo}" if user.profile_photo else None,
         "role": user.role,
         "created_at": user.created_at
     }
@@ -328,5 +328,5 @@ async def upload_profile_photo(
     user.profile_photo = file_path
     db.commit()
 
-    return {"message": "Profile photo uploaded successfully", "photo_url": f"http://localhost:8000/{file_path}"}
+    return {"message": "Profile photo uploaded successfully", "photo_url": f"{os.getenv('BACKEND_URL', 'http://localhost:8000')}/{file_path}"}
 

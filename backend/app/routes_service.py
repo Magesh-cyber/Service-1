@@ -660,7 +660,7 @@ def get_citizen_identity_qr(
 
     return {
         "verification_code": code,
-        "qr_code_url": f"http://localhost:8000/qr_codes/{filename}.png",
+        "qr_code_url": f"{os.getenv('BACKEND_URL', 'http://localhost:8000')}/qr_codes/{filename}.png",
         "message": "Citizen identity QR retrieved successfully"
     }
 
@@ -677,7 +677,7 @@ def get_citizen_qr(
         "application_id": app.application_id,
         "service_type": app.service_type,
         "status": app.status,
-        "qr_code_url": f"http://localhost:8000/qr_codes/{app.application_id}.png",
+        "qr_code_url": f"{os.getenv('BACKEND_URL', 'http://localhost:8000')}/qr_codes/{app.application_id}.png",
         "verification_code": verification_code,
         "updated_at": app.updated_at.isoformat() if app.updated_at else app.created_at.isoformat()
     }
