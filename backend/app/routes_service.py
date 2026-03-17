@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timezone
 import uuid
 import json
+import os
 
 from app.database import get_db
 from app import models, schemas
