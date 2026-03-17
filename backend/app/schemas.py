@@ -1,23 +1,36 @@
-from pydantic import BaseModel, EmailStr
-from typing import Optional, List
+from pydantic import BaseModel, EmailStr, model_validator
+from typing import Optional, List, Any
 from datetime import datetime
+from app.security_utils import sanitize_string
 
-class RegisterRequest(BaseModel):
+class SanitizedBaseModel(BaseModel):
+    @model_validator(mode='before')
+    @classmethod
+    def sanitize_all_strings(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            for key, value in data.items():
+                if isinstance(value, str):
+                    data[key] = sanitize_string(value)
+                elif isinstance(value, list):
+                    data[key] = [sanitize_string(v) if isinstance(v, str) else v for v in value]
+        return data
+
+class RegisterRequest(SanitizedBaseModel):
     full_name: str
     email: EmailStr
     password: str
     role: Optional[str] = "citizen"
 
-class LoginRequest(BaseModel):
+class LoginRequest(SanitizedBaseModel):
     email: str
     password: str
     device_id: Optional[str] = None
 
-class OTPVerifyRequest(BaseModel):
+class OTPVerifyRequest(SanitizedBaseModel):
     email: EmailStr
     otp_code: str
 
-class ApplicationRequest(BaseModel):
+class ApplicationRequest(SanitizedBaseModel):
     applicant_name: str
     dob: str
     father_name: str
@@ -31,7 +44,7 @@ class ApplicationRequest(BaseModel):
     doctor_certificate_base64: Optional[str] = None
     parent_aadhaar_base64: Optional[str] = None
 
-class PassportApplicationRequest(BaseModel):
+class PassportApplicationRequest(SanitizedBaseModel):
     # Personal Info
     full_name_aadhaar: str
     dob: str
@@ -61,7 +74,7 @@ class PassportApplicationRequest(BaseModel):
     photo_base64: Optional[str] = None
     signature_base64: Optional[str] = None
 
-class DrivingLicenseRequest(BaseModel):
+class DrivingLicenseRequest(SanitizedBaseModel):
     # Personal Information
     full_name: str
     dob: str
@@ -88,7 +101,7 @@ class DrivingLicenseRequest(BaseModel):
     vision_status: str # has myopia / hypermeteropia / clear eyesight
     is_disabled: str # Yes / No
 
-class VoterIDRequest(BaseModel):
+class VoterIDRequest(SanitizedBaseModel):
     # Personal Information
     full_name: str
     dob: str
@@ -110,7 +123,7 @@ class VoterIDRequest(BaseModel):
     # Family Details
     guardian_name: str # Father / Mother / Spouse
 
-class MarriageCertificateRequest(BaseModel):
+class MarriageCertificateRequest(SanitizedBaseModel):
     # Groom Details
     groom_name: str
     groom_dob: str
@@ -136,7 +149,7 @@ class MarriageCertificateRequest(BaseModel):
     witness2_name: str
     witness2_address: str
 
-class IncomeCertificateRequest(BaseModel):
+class IncomeCertificateRequest(SanitizedBaseModel):
     # Personal Info
     full_name: str
     dob: str
@@ -158,7 +171,7 @@ class IncomeCertificateRequest(BaseModel):
     employer_name: str
     purpose: str # Scholarship/Government Scheme/Education/Other
 
-class CommunityCertificateRequest(BaseModel):
+class CommunityCertificateRequest(SanitizedBaseModel):
     # Personal Info
     full_name: str
     dob: str
@@ -182,7 +195,7 @@ class CommunityCertificateRequest(BaseModel):
     # Verification
     parent_certificate_base64: str
 
-class BuildingPermitRequest(BaseModel):
+class BuildingPermitRequest(SanitizedBaseModel):
     # Applicant Information
     applicant_name: str
     aadhaar_number: str
@@ -205,24 +218,24 @@ class BuildingPermitRequest(BaseModel):
     ownership_proof_base64: Optional[str] = None
     construction_start_date: str
 
-class DecisionRequest(BaseModel):
+class DecisionRequest(SanitizedBaseModel):
     remark: Optional[str] = None
 
-class PasswordResetRequest(BaseModel):
+class PasswordResetRequest(SanitizedBaseModel):
     email: EmailStr
 
-class PasswordUpdateRequest(BaseModel):
+class PasswordUpdateRequest(SanitizedBaseModel):
     email: EmailStr
     otp_code: str
     new_password: str
 
 # PDS Schemas
-class PDSItemBase(BaseModel):
+class PDSItemBase(SanitizedBaseModel):
     item_name: str
     quantity: float
     unit: str
 
-class PDSTransactionRequest(BaseModel):
+class PDSTransactionRequest(SanitizedBaseModel):
     transaction_id: str
     citizen_code: str
     beneficiary_name: str
@@ -235,7 +248,7 @@ class PDSTransactionRequest(BaseModel):
     items: list[PDSItemBase]
     sync_status: Optional[str] = "SYNCED"
 
-class BulksyncRequest(BaseModel):
+class BulksyncRequest(SanitizedBaseModel):
     transactions: list[PDSTransactionRequest]
 
 class PDSItemResponse(PDSItemBase):
@@ -245,7 +258,7 @@ class PDSItemResponse(PDSItemBase):
     class Config:
         from_attributes = True
 
-class PDSTransactionResponse(BaseModel):
+class PDSTransactionResponse(SanitizedBaseModel):
     transaction_id: str
     citizen_code: str
     beneficiary_name: str
@@ -261,7 +274,7 @@ class PDSTransactionResponse(BaseModel):
 
     class Config:
         from_attributes = True
-class PDSSummaryResponse(BaseModel):
+class PDSSummaryResponse(SanitizedBaseModel):
     issued_today: int
     queue_status: str
     total_stock_items: int
