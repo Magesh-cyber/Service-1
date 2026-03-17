@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { auth } from '@/lib/auth';
 import { apiFetch, endpoints } from '@/lib/api';
+import { auth } from '@/lib/auth';
 import StatusCard from '@/components/StatusCard';
 import ServiceCard from '@/components/ServiceCard';
 import ApplicationTracker from '@/components/ApplicationTracker';
@@ -67,7 +67,7 @@ export default function DashboardPage() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/upload-profile-photo', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/upload-profile-photo`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`

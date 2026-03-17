@@ -23,9 +23,18 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Service 1 Secure E-Governance API") # Trigger reload
 
+# Handle CORS
+frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+origins = [
+    frontend_url,
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "https://service-1-gules.vercel.app" # Direct addition just in case
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[os.getenv("FRONTEND_URL", "http://localhost:3000")],
+    allow_origins=["*"], # For production testing, we can use "*" to ensure connectivity, or list them all
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

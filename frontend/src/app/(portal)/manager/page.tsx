@@ -42,7 +42,7 @@ export default function ManagerDashboard() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/upload-profile-photo', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/upload-profile-photo`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
