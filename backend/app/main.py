@@ -21,6 +21,36 @@ from app.routes_pds import router as pds_router
 
 Base.metadata.create_all(bind=engine)
 
+# Seed default accounts for cloud deployment
+from app.database import SessionLocal
+def seed_users():
+    from app.auth import hash_password
+    db = SessionLocal()
+    try:
+        users_to_seed = [
+            {"full_name": "Default Clerk", "email": "clerk@example.com", "password": "clerk123", "role": "clerk"},
+            {"full_name": "Default Manager", "email": "manager@example.com", "password": "manager123", "role": "manager"},
+            {"full_name": "Default PDS Admin", "email": "pdsadmin@example.com", "password": "pds123", "role": "pds_admin"},
+        ]
+        
+        for user_data in users_to_seed:
+            exists = db.query(models.User).filter(models.User.email == user_data["email"]).first()
+            if not exists:
+                new_user = models.User(
+                    full_name=user_data["full_name"],
+                    email=user_data["email"],
+                    password_hash=hash_password(user_data["password"]),
+                    role=user_data["role"]
+                )
+                db.add(new_user)
+        db.commit()
+    except Exception as e:
+        print(f"Seeding error: {e}")
+    finally:
+        db.close()
+
+seed_users()
+
 app = FastAPI(title="Service 1 Secure E-Governance API") # Trigger reload
 
 # Handle CORS
